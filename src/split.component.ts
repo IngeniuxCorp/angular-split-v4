@@ -5,6 +5,7 @@ import {
 
 import { Observable, Subscription, BehaviorSubject } from 'rxjs/Rx';
 import { SplitAreaDirective } from './splitArea.directive';
+import { SplitStateService, SplitAreaState } from './splitStateService';
 
 export interface IAreaData {
     component: SplitAreaDirective;
@@ -93,13 +94,24 @@ export class SplitComponent implements OnChanges, OnDestroy {
     @Output() dragProgress = new EventEmitter<Array<number>>(false);
     @Output() dragEnd = new EventEmitter<Array<number>>(false);
 
+    @Input() saveStates: boolean = false;
+
+    @Input() set name(val: string) {
+        if (val)
+            this.splitStateService.splitName = val;
+    }
+
+    get name(): string {
+        return this.splitStateService.splitName;
+    }
+
 
     private _visibleTransitionEndSub: BehaviorSubject<Array<number>> = new BehaviorSubject<Array<number>>([]);
     /**
      * This event is fired when split area show/hide are done with animations completed.
      * Make sure use debounceTime and distinctUntilChange before subscription,
      * to handle the fact that adjacent split areas also triggering the event, during show/hide of single area.
-     */    
+     */
     @Output() visibleTransitionEnd: Observable<Array<number>> = this._visibleTransitionEndSub.asObservable();
 
     @HostBinding('class.vertical') get styleFlexDirection() {
@@ -119,7 +131,7 @@ export class SplitComponent implements OnChanges, OnDestroy {
         return (this.height && !isNaN(this.height) && this.height > 0) ? this.height + 'px' : '100%';
     }
 
-    private get visibleAreas(): IAreaData[] {   
+    private get visibleAreas(): IAreaData[] {
         return this.areas.filter(a => a.component.visible);
     }
 
@@ -135,7 +147,9 @@ export class SplitComponent implements OnChanges, OnDestroy {
     private areaBSize: number = 0;
     private eventsDragFct: Array<Function> = [];
 
-    constructor(private cdRef: ChangeDetectorRef,
+    constructor(
+        private splitStateService: SplitStateService,
+        private cdRef: ChangeDetectorRef,
         private elementRef: ElementRef,
         private renderer: Renderer) { }
 
@@ -143,6 +157,20 @@ export class SplitComponent implements OnChanges, OnDestroy {
         if (changes['gutterSize'] || changes['disabled']) {
             this.refresh();
         }
+    }
+
+    public ngAfterViewInit() {
+        if (!this.saveStates)
+            return;
+
+        var state = this.splitStateService.loadState();
+        if (state && this.areas.length == state.length)
+            this.areas.forEach((a, i) => {
+                a.size = state[i].size;
+                a.component.visible = state[i].visible;
+            });
+
+        this.refresh();
     }
 
     public addArea(component: SplitAreaDirective, orderUser: number | null, sizeUser: number | null, minPixel: number) {
@@ -154,6 +182,7 @@ export class SplitComponent implements OnChanges, OnDestroy {
             size: -1,
             minPixel
         });
+        // this._saveState();
 
         this.refresh();
     }
@@ -165,6 +194,7 @@ export class SplitComponent implements OnChanges, OnDestroy {
             item.orderUser = orderUser;
             item.sizeUser = sizeUser;
             item.minPixel = minPixel;
+            // this._saveState();
 
             this.refresh();
         }
@@ -177,6 +207,7 @@ export class SplitComponent implements OnChanges, OnDestroy {
             const index = this.areas.indexOf(item);
             this.areas.splice(index, 1);
             this.areas.forEach((a, i) => a.order = i * 2);
+            // this._saveState();
 
             this.refresh();
         }
@@ -186,6 +217,7 @@ export class SplitComponent implements OnChanges, OnDestroy {
         const item = this.areas.find(a => a.component === area);
 
         if (item) {
+            this._saveState();
             this.refresh();
         }
     }
@@ -194,6 +226,7 @@ export class SplitComponent implements OnChanges, OnDestroy {
         const item = this.areas.find(a => a.component === area);
 
         if (item) {
+            this._saveState();
             this.refresh();
         }
     }
@@ -361,7 +394,18 @@ export class SplitComponent implements OnChanges, OnDestroy {
         this.areaBSize = 0;
 
         this.isDragging = false;
+        this._saveState();
         this.notify('end');
+    }
+
+    private _saveState() {
+        if (this.saveStates)
+            this.splitStateService.saveState(this.areas.map(a => {
+                return {
+                    size: a.size,
+                    visible: a.component.visible
+                } as SplitAreaState;
+            }));
     }
 
     notify(type: string) {

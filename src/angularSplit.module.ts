@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { SplitComponent } from './split.component';
 import { SplitAreaDirective } from './splitArea.directive';
 import { SplitGutterDirective } from './splitGutter.directive';
+import { SplitStateService } from './splitStateService';
+import { CookieService } from './cookieService';
 
 @NgModule({
     imports: [
@@ -18,6 +20,7 @@ import { SplitGutterDirective } from './splitGutter.directive';
         SplitComponent,
         SplitAreaDirective,
         SplitGutterDirective
-    ]
+    ], 
+    providers: [SplitStateService, CookieService]
 })
 export class AngularSplitModule {}

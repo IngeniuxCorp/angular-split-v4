@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, ElementRef, SimpleChanges, EventEmitter, Renderer, OnDestroy, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 import { SplitAreaDirective } from './splitArea.directive';
+import { SplitStateService } from './splitStateService';
 export interface IAreaData {
     component: SplitAreaDirective;
     sizeUser: number | null;
@@ -10,6 +11,7 @@ export interface IAreaData {
     minPixel: number;
 }
 export declare class SplitComponent implements OnChanges, OnDestroy {
+    private splitStateService;
     private cdRef;
     private elementRef;
     private renderer;
@@ -22,6 +24,8 @@ export declare class SplitComponent implements OnChanges, OnDestroy {
     dragStart: EventEmitter<number[]>;
     dragProgress: EventEmitter<number[]>;
     dragEnd: EventEmitter<number[]>;
+    saveStates: boolean;
+    name: string;
     private _visibleTransitionEndSub;
     /**
      * This event is fired when split area show/hide are done with animations completed.
@@ -42,8 +46,9 @@ export declare class SplitComponent implements OnChanges, OnDestroy {
     private areaASize;
     private areaBSize;
     private eventsDragFct;
-    constructor(cdRef: ChangeDetectorRef, elementRef: ElementRef, renderer: Renderer);
+    constructor(splitStateService: SplitStateService, cdRef: ChangeDetectorRef, elementRef: ElementRef, renderer: Renderer);
     ngOnChanges(changes: SimpleChanges): void;
+    ngAfterViewInit(): void;
     addArea(component: SplitAreaDirective, orderUser: number | null, sizeUser: number | null, minPixel: number): void;
     updateArea(component: SplitAreaDirective, orderUser: number | null, sizeUser: number | null, minPixel: number): void;
     removeArea(area: SplitAreaDirective): void;
@@ -56,6 +61,7 @@ export declare class SplitComponent implements OnChanges, OnDestroy {
     private dragEvent(event, start, areaA, areaB);
     private drag(start, end, areaA, areaB);
     private stopDragging();
+    private _saveState();
     notify(type: string): void;
     ngOnDestroy(): void;
 }
