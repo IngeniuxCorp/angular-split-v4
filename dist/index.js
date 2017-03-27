@@ -8,4 +8,4 @@ var splitArea_directive_1 = require("./splitArea.directive");
 exports.SplitAreaDirective = splitArea_directive_1.SplitAreaDirective;
 var splitGutter_directive_1 = require("./splitGutter.directive");
 exports.SplitGutterDirective = splitGutter_directive_1.SplitGutterDirective;
-//# sourceMappingURL=C:/dev/angular-split-igx/index.js.map
+//# sourceMappingURL=C:/dev/angular-split-igx_v4/index.js.map

@@ -37,4 +37,4 @@ AngularSplitModule = __decorate([
     })
 ], AngularSplitModule);
 exports.AngularSplitModule = AngularSplitModule;
-//# sourceMappingURL=C:/dev/angular-split-igx/angularSplit.module.js.map
+//# sourceMappingURL=C:/dev/angular-split-igx_v4/angularSplit.module.js.map

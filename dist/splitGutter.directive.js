@@ -104,4 +104,4 @@ SplitGutterDirective = __decorate([
         core_1.Renderer])
 ], SplitGutterDirective);
 exports.SplitGutterDirective = SplitGutterDirective;
-//# sourceMappingURL=C:/dev/angular-split-igx/splitGutter.directive.js.map
+//# sourceMappingURL=C:/dev/angular-split-igx_v4/splitGutter.directive.js.map

@@ -408,4 +408,4 @@ SplitComponent = __decorate([
         core_1.Renderer])
 ], SplitComponent);
 exports.SplitComponent = SplitComponent;
-//# sourceMappingURL=C:/dev/angular-split-igx/split.component.js.map
+//# sourceMappingURL=C:/dev/angular-split-igx_v4/split.component.js.map

@@ -42,4 +42,4 @@ var CookieService = (function () {
     return CookieService;
 }());
 exports.CookieService = CookieService;
-//# sourceMappingURL=C:/dev/angular-split-igx/cookieService.js.map
+//# sourceMappingURL=C:/dev/angular-split-igx_v4/cookieService.js.map
