@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var Rx_1 = require("rxjs/Rx");
 var splitStateService_1 = require("./splitStateService");
+var browserService_1 = require("./browserService");
 var SplitComponent = (function () {
     function SplitComponent(splitStateService, cdRef, elementRef, renderer) {
         this.splitStateService = splitStateService;
@@ -182,6 +183,11 @@ var SplitComponent = (function () {
         var visibleAreas = this.visibleAreas;
         var f = this.gutterSize * this.nbGutters / visibleAreas.length;
         visibleAreas.forEach(function (a) { return a.component.setStyle('flex-basis', "calc( " + a.size + "% - " + f + "px )"); });
+        if (browserService_1.BrowserService.isIE()) {
+            //ie and edge don't support flex-basis animation
+            //fire event right here
+            this.notify('visibleTransitionEnd');
+        }
     };
     SplitComponent.prototype.startDragging = function (startEvent, gutterOrder) {
         var _this = this;

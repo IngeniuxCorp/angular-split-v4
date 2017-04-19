@@ -6,6 +6,7 @@ import {
 import { Observable, Subscription, BehaviorSubject } from 'rxjs/Rx';
 import { SplitAreaDirective } from './splitArea.directive';
 import { SplitStateService, SplitAreaState } from './splitStateService';
+import { BrowserService } from "./browserService";
 
 export interface IAreaData {
     component: SplitAreaDirective;
@@ -273,6 +274,12 @@ export class SplitComponent implements OnChanges, OnDestroy {
 
         const f = this.gutterSize * this.nbGutters / visibleAreas.length;
         visibleAreas.forEach(a => a.component.setStyle('flex-basis', `calc( ${a.size}% - ${f}px )`));
+
+        if (BrowserService.isIE()) {
+            //ie and edge don't support flex-basis animation
+            //fire event right here
+            this.notify('visibleTransitionEnd');
+        }
     }
 
     public startDragging(startEvent: MouseEvent | TouchEvent, gutterOrder: number) {
