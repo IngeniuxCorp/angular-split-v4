@@ -26,6 +26,8 @@ export declare class SplitComponent implements OnChanges, OnDestroy {
     dragEnd: EventEmitter<number[]>;
     saveStates: boolean;
     name: string;
+    private _coverDisplay;
+    coverDisplay: Observable<string>;
     private _visibleTransitionEndSub;
     /**
      * This event is fired when split area show/hide are done with animations completed.

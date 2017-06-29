@@ -72,6 +72,8 @@ interface Point {
         }
     `],
     template: `
+        <div #cover style="position:absolute;left:0;top:0;right:0;bottom:0;z-index:100;"
+            [style.display]="coverDisplay | async"></div>
         <ng-content></ng-content>
         <ng-template ngFor let-area [ngForOf]="areas" let-index="index" let-last="last">
             <split-gutter *ngIf="last === false && area.component.visible && !isLastVisibleArea(area)" 
@@ -106,6 +108,8 @@ export class SplitComponent implements OnChanges, OnDestroy {
         return this.splitStateService.splitName;
     }
 
+    private _coverDisplay = new BehaviorSubject<string>("none");
+    coverDisplay: Observable<string> = this._coverDisplay.asObservable();
 
     private _visibleTransitionEndSub: BehaviorSubject<Array<number>> = new BehaviorSubject<Array<number>>([]);
     /**
@@ -315,6 +319,8 @@ export class SplitComponent implements OnChanges, OnDestroy {
             return;
         }
 
+        //add the overlay transparent  cover to handle dragging over iframes
+
         this.eventsDragFct.push(this.renderer.listenGlobal('document', 'mousemove', e => this.dragEvent(e, start, areaA, areaB)));
         this.eventsDragFct.push(this.renderer.listenGlobal('document', 'touchmove', e => this.dragEvent(e, start, areaA, areaB)));
         this.eventsDragFct.push(this.renderer.listenGlobal('document', 'mouseup', e => this.stopDragging()));
@@ -325,6 +331,7 @@ export class SplitComponent implements OnChanges, OnDestroy {
         areaB.component.lockEvents();
 
         this.isDragging = true;
+        this._coverDisplay.next("block");
         this.notify('start');
     }
 
@@ -401,6 +408,8 @@ export class SplitComponent implements OnChanges, OnDestroy {
         this.areaBSize = 0;
 
         this.isDragging = false;
+        this._coverDisplay.next("none");
+        
         this._saveState();
         this.notify('end');
     }

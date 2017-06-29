@@ -5,3 +5,8 @@ Angular (2+) UI library to split views.
 
 Documentation and examples:
 [https://bertrandg.github.io/angular-split/](https://bertrandg.github.io/angular-split/)
+
+Ingeniux Edition:
+1. Angular V4 support
+2. Enhanced events system
+3. Allow resize with iframes in panels

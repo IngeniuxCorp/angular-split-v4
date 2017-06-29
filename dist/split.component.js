@@ -1,4 +1,13 @@
 "use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var Rx_1 = require("rxjs/Rx");
@@ -18,6 +27,8 @@ var SplitComponent = (function () {
         this.dragProgress = new core_1.EventEmitter(false);
         this.dragEnd = new core_1.EventEmitter(false);
         this.saveStates = false;
+        this._coverDisplay = new Rx_1.BehaviorSubject("none");
+        this.coverDisplay = this._coverDisplay.asObservable();
         this._visibleTransitionEndSub = new Rx_1.BehaviorSubject([]);
         /**
          * This event is fired when split area show/hide are done with animations completed.
@@ -220,6 +231,7 @@ var SplitComponent = (function () {
         else {
             return;
         }
+        //add the overlay transparent  cover to handle dragging over iframes
         this.eventsDragFct.push(this.renderer.listenGlobal('document', 'mousemove', function (e) { return _this.dragEvent(e, start, areaA, areaB); }));
         this.eventsDragFct.push(this.renderer.listenGlobal('document', 'touchmove', function (e) { return _this.dragEvent(e, start, areaA, areaB); }));
         this.eventsDragFct.push(this.renderer.listenGlobal('document', 'mouseup', function (e) { return _this.stopDragging(); }));
@@ -228,6 +240,7 @@ var SplitComponent = (function () {
         areaA.component.lockEvents();
         areaB.component.lockEvents();
         this.isDragging = true;
+        this._coverDisplay.next("block");
         this.notify('start');
     };
     SplitComponent.prototype.dragEvent = function (event, start, areaA, areaB) {
@@ -293,6 +306,7 @@ var SplitComponent = (function () {
         this.areaASize = 0;
         this.areaBSize = 0;
         this.isDragging = false;
+        this._coverDisplay.next("none");
         this._saveState();
         this.notify('end');
     };
@@ -321,39 +335,87 @@ var SplitComponent = (function () {
     SplitComponent.prototype.ngOnDestroy = function () {
         this.stopDragging();
     };
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], SplitComponent.prototype, "direction", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Number)
+    ], SplitComponent.prototype, "width", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Number)
+    ], SplitComponent.prototype, "height", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Number)
+    ], SplitComponent.prototype, "gutterSize", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], SplitComponent.prototype, "disabled", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], SplitComponent.prototype, "animateAreaToggle", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", Object)
+    ], SplitComponent.prototype, "dragStart", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", Object)
+    ], SplitComponent.prototype, "dragProgress", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", Object)
+    ], SplitComponent.prototype, "dragEnd", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], SplitComponent.prototype, "saveStates", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String),
+        __metadata("design:paramtypes", [String])
+    ], SplitComponent.prototype, "name", null);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", Rx_1.Observable)
+    ], SplitComponent.prototype, "visibleTransitionEnd", void 0);
+    __decorate([
+        core_1.HostBinding('class.vertical'),
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [])
+    ], SplitComponent.prototype, "styleFlexDirection", null);
+    __decorate([
+        core_1.HostBinding('class.notrans'),
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [])
+    ], SplitComponent.prototype, "dragging", null);
+    __decorate([
+        core_1.HostBinding('style.width'),
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [])
+    ], SplitComponent.prototype, "styleWidth", null);
+    __decorate([
+        core_1.HostBinding('style.height'),
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [])
+    ], SplitComponent.prototype, "styleHeight", null);
+    SplitComponent = __decorate([
+        core_1.Component({
+            selector: 'split',
+            changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+            styles: ["\n        :host {\n            display: flex;\n            flex-wrap: nowrap;\n            justify-content: flex-start;\n            flex-direction: row;\n        }\n\n        :host.vertical {\n            flex-direction: column;\n        }\n\n        split-gutter {\n            flex-grow: 0;\n            flex-shrink: 0;\n            flex-basis: 10px;\n            height: 100%;\n            background-color: #eeeeee;\n            background-position: 50%;\n            background-repeat: no-repeat;\n        }\n\n        :host.vertical split-gutter {\n            width: 100%;\n        }\n\n        :host /deep/ split-area {\n            transition: flex-basis 0.3s;\n        }  \n\n        :host.notrans /deep/ split-area {\n            transition: none !important;\n        }      \n\n        :host /deep/ split-area.notshow {\n            flex-basis: 0 !important;\n            overflow: hidden !important;\n        }      \n\n        :host.vertical /deep/ split-area.notshow {\n            max-width: 0;\n            flex-basis: 0 !important;\n            overflow: hidden !important;\n        }\n    "],
+            template: "\n        <div #cover style=\"position:absolute;left:0;top:0;right:0;bottom:0;z-index:100;\"\n            [style.display]=\"coverDisplay | async\"></div>\n        <ng-content></ng-content>\n        <ng-template ngFor let-area [ngForOf]=\"areas\" let-index=\"index\" let-last=\"last\">\n            <split-gutter *ngIf=\"last === false && area.component.visible && !isLastVisibleArea(area)\" \n                          [order]=\"index*2+1\"\n                          [direction]=\"direction\"\n                          [size]=\"gutterSize\"\n                          [disabled]=\"disabled\"\n                          (mousedown)=\"startDragging($event, index*2+1)\"\n                          (touchstart)=\"startDragging($event, index*2+1)\"></split-gutter>\n        </ng-template>",
+        }),
+        __metadata("design:paramtypes", [splitStateService_1.SplitStateService,
+            core_1.ChangeDetectorRef,
+            core_1.ElementRef,
+            core_1.Renderer])
+    ], SplitComponent);
     return SplitComponent;
 }());
-SplitComponent.decorators = [
-    { type: core_1.Component, args: [{
-                selector: 'split',
-                changeDetection: core_1.ChangeDetectionStrategy.OnPush,
-                styles: ["\n        :host {\n            display: flex;\n            flex-wrap: nowrap;\n            justify-content: flex-start;\n            flex-direction: row;\n        }\n\n        :host.vertical {\n            flex-direction: column;\n        }\n\n        split-gutter {\n            flex-grow: 0;\n            flex-shrink: 0;\n            flex-basis: 10px;\n            height: 100%;\n            background-color: #eeeeee;\n            background-position: 50%;\n            background-repeat: no-repeat;\n        }\n\n        :host.vertical split-gutter {\n            width: 100%;\n        }\n\n        :host /deep/ split-area {\n            transition: flex-basis 0.3s;\n        }  \n\n        :host.notrans /deep/ split-area {\n            transition: none !important;\n        }      \n\n        :host /deep/ split-area.notshow {\n            flex-basis: 0 !important;\n            overflow: hidden !important;\n        }      \n\n        :host.vertical /deep/ split-area.notshow {\n            max-width: 0;\n            flex-basis: 0 !important;\n            overflow: hidden !important;\n        }\n    "],
-                template: "\n        <ng-content></ng-content>\n        <ng-template ngFor let-area [ngForOf]=\"areas\" let-index=\"index\" let-last=\"last\">\n            <split-gutter *ngIf=\"last === false && area.component.visible && !isLastVisibleArea(area)\" \n                          [order]=\"index*2+1\"\n                          [direction]=\"direction\"\n                          [size]=\"gutterSize\"\n                          [disabled]=\"disabled\"\n                          (mousedown)=\"startDragging($event, index*2+1)\"\n                          (touchstart)=\"startDragging($event, index*2+1)\"></split-gutter>\n        </ng-template>",
-            },] },
-];
-/** @nocollapse */
-SplitComponent.ctorParameters = function () { return [
-    { type: splitStateService_1.SplitStateService, },
-    { type: core_1.ChangeDetectorRef, },
-    { type: core_1.ElementRef, },
-    { type: core_1.Renderer, },
-]; };
-SplitComponent.propDecorators = {
-    'direction': [{ type: core_1.Input },],
-    'width': [{ type: core_1.Input },],
-    'height': [{ type: core_1.Input },],
-    'gutterSize': [{ type: core_1.Input },],
-    'disabled': [{ type: core_1.Input },],
-    'animateAreaToggle': [{ type: core_1.Input },],
-    'dragStart': [{ type: core_1.Output },],
-    'dragProgress': [{ type: core_1.Output },],
-    'dragEnd': [{ type: core_1.Output },],
-    'saveStates': [{ type: core_1.Input },],
-    'name': [{ type: core_1.Input },],
-    'visibleTransitionEnd': [{ type: core_1.Output },],
-    'styleFlexDirection': [{ type: core_1.HostBinding, args: ['class.vertical',] },],
-    'dragging': [{ type: core_1.HostBinding, args: ['class.notrans',] },],
-    'styleWidth': [{ type: core_1.HostBinding, args: ['style.width',] },],
-    'styleHeight': [{ type: core_1.HostBinding, args: ['style.height',] },],
-};
 exports.SplitComponent = SplitComponent;
