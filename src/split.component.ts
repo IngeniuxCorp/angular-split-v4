@@ -1,6 +1,6 @@
 import {
     Component, ChangeDetectorRef, Input, Output, HostBinding, ElementRef, SimpleChanges,
-    ChangeDetectionStrategy, EventEmitter, Renderer, OnDestroy, OnChanges
+    ChangeDetectionStrategy, EventEmitter, Renderer2, OnDestroy, OnChanges
 } from '@angular/core';
 
 import { Observable, Subscription, BehaviorSubject } from 'rxjs/Rx';
@@ -156,7 +156,7 @@ export class SplitComponent implements OnChanges, OnDestroy {
         private splitStateService: SplitStateService,
         private cdRef: ChangeDetectorRef,
         private elementRef: ElementRef,
-        private renderer: Renderer) { }
+        private renderer: Renderer2) { }
 
     public ngOnChanges(changes: SimpleChanges) {
         if (changes['gutterSize'] || changes['disabled']) {
@@ -321,11 +321,11 @@ export class SplitComponent implements OnChanges, OnDestroy {
 
         //add the overlay transparent  cover to handle dragging over iframes
 
-        this.eventsDragFct.push(this.renderer.listenGlobal('document', 'mousemove', e => this.dragEvent(e, start, areaA, areaB)));
-        this.eventsDragFct.push(this.renderer.listenGlobal('document', 'touchmove', e => this.dragEvent(e, start, areaA, areaB)));
-        this.eventsDragFct.push(this.renderer.listenGlobal('document', 'mouseup', e => this.stopDragging()));
-        this.eventsDragFct.push(this.renderer.listenGlobal('document', 'touchend', e => this.stopDragging()));
-        this.eventsDragFct.push(this.renderer.listenGlobal('document', 'touchcancel', e => this.stopDragging()));
+        this.eventsDragFct.push(this.renderer.listen('document', 'mousemove', e => this.dragEvent(e, start, areaA, areaB)));
+        this.eventsDragFct.push(this.renderer.listen('document', 'touchmove', e => this.dragEvent(e, start, areaA, areaB)));
+        this.eventsDragFct.push(this.renderer.listen('document', 'mouseup', e => this.stopDragging()));
+        this.eventsDragFct.push(this.renderer.listen('document', 'touchend', e => this.stopDragging()));
+        this.eventsDragFct.push(this.renderer.listen('document', 'touchcancel', e => this.stopDragging()));
 
         areaA.component.lockEvents();
         areaB.component.lockEvents();

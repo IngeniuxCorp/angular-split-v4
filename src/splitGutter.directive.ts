@@ -1,4 +1,4 @@
-import { Directive, Input, ElementRef, Renderer } from '@angular/core';
+import { Directive, Input, ElementRef, Renderer2 } from '@angular/core';
 
 @Directive({
     selector: 'split-gutter'
@@ -26,7 +26,7 @@ export class SplitGutterDirective {
     }
 
     constructor(private elementRef: ElementRef,
-                private renderer: Renderer) {}
+                private renderer: Renderer2) {}
 
     private refreshStyle() {
         const state = this._disabled === true ? 'disabled' : this._direction;
@@ -36,7 +36,7 @@ export class SplitGutterDirective {
     }
 
     private setStyle(key: string, value: any) {
-        this.renderer.setElementStyle(this.elementRef.nativeElement, key, value);
+        this.renderer.setStyle(this.elementRef.nativeElement, key, value);
     }
 
     private getCursor(state: string) {

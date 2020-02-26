@@ -1,4 +1,4 @@
-import { ElementRef, Renderer } from '@angular/core';
+import { ElementRef, Renderer2 } from '@angular/core';
 export declare class SplitGutterDirective {
     private elementRef;
     private renderer;
@@ -8,7 +8,7 @@ export declare class SplitGutterDirective {
     size: any;
     private _disabled;
     disabled: boolean;
-    constructor(elementRef: ElementRef, renderer: Renderer);
+    constructor(elementRef: ElementRef, renderer: Renderer2);
     private refreshStyle();
     private setStyle(key, value);
     private getCursor(state);

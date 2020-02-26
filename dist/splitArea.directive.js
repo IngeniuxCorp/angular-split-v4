@@ -71,7 +71,7 @@ var SplitAreaDirective = (function () {
         }
     };
     SplitAreaDirective.prototype.setStyle = function (key, value) {
-        this.renderer.setElementStyle(this.elementRef.nativeElement, key, value);
+        this.renderer.setStyle(this.elementRef.nativeElement, key, value);
     };
     SplitAreaDirective.prototype.ngOnDestroy = function () {
         this.split.removeArea(this);
@@ -99,7 +99,7 @@ var SplitAreaDirective = (function () {
     /** @nocollapse */
     SplitAreaDirective.ctorParameters = function () { return [
         { type: core_1.ElementRef, },
-        { type: core_1.Renderer, },
+        { type: core_1.Renderer2, },
         { type: split_component_1.SplitComponent, },
     ]; };
     SplitAreaDirective.propDecorators = {

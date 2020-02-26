@@ -223,11 +223,11 @@ var SplitComponent = (function () {
             return;
         }
         //add the overlay transparent  cover to handle dragging over iframes
-        this.eventsDragFct.push(this.renderer.listenGlobal('document', 'mousemove', function (e) { return _this.dragEvent(e, start, areaA, areaB); }));
-        this.eventsDragFct.push(this.renderer.listenGlobal('document', 'touchmove', function (e) { return _this.dragEvent(e, start, areaA, areaB); }));
-        this.eventsDragFct.push(this.renderer.listenGlobal('document', 'mouseup', function (e) { return _this.stopDragging(); }));
-        this.eventsDragFct.push(this.renderer.listenGlobal('document', 'touchend', function (e) { return _this.stopDragging(); }));
-        this.eventsDragFct.push(this.renderer.listenGlobal('document', 'touchcancel', function (e) { return _this.stopDragging(); }));
+        this.eventsDragFct.push(this.renderer.listen('document', 'mousemove', function (e) { return _this.dragEvent(e, start, areaA, areaB); }));
+        this.eventsDragFct.push(this.renderer.listen('document', 'touchmove', function (e) { return _this.dragEvent(e, start, areaA, areaB); }));
+        this.eventsDragFct.push(this.renderer.listen('document', 'mouseup', function (e) { return _this.stopDragging(); }));
+        this.eventsDragFct.push(this.renderer.listen('document', 'touchend', function (e) { return _this.stopDragging(); }));
+        this.eventsDragFct.push(this.renderer.listen('document', 'touchcancel', function (e) { return _this.stopDragging(); }));
         areaA.component.lockEvents();
         areaB.component.lockEvents();
         this.isDragging = true;
@@ -339,7 +339,7 @@ var SplitComponent = (function () {
         { type: splitStateService_1.SplitStateService, },
         { type: core_1.ChangeDetectorRef, },
         { type: core_1.ElementRef, },
-        { type: core_1.Renderer, },
+        { type: core_1.Renderer2, },
     ]; };
     SplitComponent.propDecorators = {
         'direction': [{ type: core_1.Input },],

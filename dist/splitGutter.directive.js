@@ -43,7 +43,7 @@ var SplitGutterDirective = (function () {
         this.setStyle('background-image', "url(\"" + this.getImage(state) + "\")");
     };
     SplitGutterDirective.prototype.setStyle = function (key, value) {
-        this.renderer.setElementStyle(this.elementRef.nativeElement, key, value);
+        this.renderer.setStyle(this.elementRef.nativeElement, key, value);
     };
     SplitGutterDirective.prototype.getCursor = function (state) {
         switch (state) {
@@ -73,7 +73,7 @@ var SplitGutterDirective = (function () {
     /** @nocollapse */
     SplitGutterDirective.ctorParameters = function () { return [
         { type: core_1.ElementRef, },
-        { type: core_1.Renderer, },
+        { type: core_1.Renderer2, },
     ]; };
     SplitGutterDirective.propDecorators = {
         'order': [{ type: core_1.Input },],

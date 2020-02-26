@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, ElementRef, SimpleChanges, EventEmitter, Renderer, OnDestroy, OnChanges } from '@angular/core';
+import { ChangeDetectorRef, ElementRef, SimpleChanges, EventEmitter, Renderer2, OnDestroy, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 import { SplitAreaDirective } from './splitArea.directive';
 import { SplitStateService } from './splitStateService';
@@ -48,7 +48,7 @@ export declare class SplitComponent implements OnChanges, OnDestroy {
     private areaASize;
     private areaBSize;
     private eventsDragFct;
-    constructor(splitStateService: SplitStateService, cdRef: ChangeDetectorRef, elementRef: ElementRef, renderer: Renderer);
+    constructor(splitStateService: SplitStateService, cdRef: ChangeDetectorRef, elementRef: ElementRef, renderer: Renderer2);
     ngOnChanges(changes: SimpleChanges): void;
     ngAfterViewInit(): void;
     addArea(component: SplitAreaDirective, orderUser: number | null, sizeUser: number | null, minPixel: number): void;

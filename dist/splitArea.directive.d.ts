@@ -1,4 +1,4 @@
-import { ElementRef, Renderer, OnInit, OnDestroy } from '@angular/core';
+import { ElementRef, Renderer2, OnInit, OnDestroy } from '@angular/core';
 import { SplitComponent } from './split.component';
 export declare class SplitAreaDirective implements OnInit, OnDestroy {
     private elementRef;
@@ -14,7 +14,7 @@ export declare class SplitAreaDirective implements OnInit, OnDestroy {
     visible: boolean;
     visibility: string;
     eventsLockFct: Array<Function>;
-    constructor(elementRef: ElementRef, renderer: Renderer, split: SplitComponent);
+    constructor(elementRef: ElementRef, renderer: Renderer2, split: SplitComponent);
     ngOnInit(): void;
     lockEvents(): void;
     unlockEvents(): void;

@@ -1,5 +1,5 @@
 import {
-    Directive, Input, Output, ElementRef, Renderer, OnInit, OnDestroy,
+    Directive, Input, Output, ElementRef, Renderer2, OnInit, OnDestroy,
     EventEmitter
 } from '@angular/core';
 
@@ -57,7 +57,7 @@ export class SplitAreaDirective implements OnInit, OnDestroy {
     eventsLockFct: Array<Function> = [];
 
     constructor(private elementRef: ElementRef,
-        private renderer: Renderer,
+        private renderer: Renderer2,
         private split: SplitComponent) { }
 
     public ngOnInit() {
@@ -79,7 +79,7 @@ export class SplitAreaDirective implements OnInit, OnDestroy {
     }
 
     public setStyle(key: string, value: any) {
-        this.renderer.setElementStyle(this.elementRef.nativeElement, key, value);
+        this.renderer.setStyle(this.elementRef.nativeElement, key, value);
     }
 
     public ngOnDestroy() {
